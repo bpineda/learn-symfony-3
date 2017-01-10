@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="row">
+      <div class="medium-12 large-12 columns">
+        <h4>Clients/Booking</h4>
+        <div class="medium-2  columns">BOOKING FOR:</div>
+        <div class="medium-2  columns"><b>BERNARD PINEDA</b></div>
+        <div class="medium-1  columns">FROM:</div>
+        <div class="medium-2  columns"><input type="text" class="datepicker" /></div>
+        <div class="medium-1  columns">TO:</div>
+        <div class="medium-2  columns"><input type="text" class="datepicker" /></div>
+        <div class="medium-2  columns"><button type="button" class="button">SEARCH</button></div>
+
+        <table class="stack">
+          <thead>
+            <tr>
+              <th width="200">Room</th>
+              <th width="200">Availability</th>
+              <th width="200">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>201</td>
+              <td>
+                <div class="callout success">
+                    <h7>Available</h7>
+                </div>
+              </td>
+              <td>
+                <a class="hollow button warning" href="/book/1">BOOK NOW</a>
+              </td>
+            </tr>
+            <tr>
+              <td>202</td>
+              <td>
+                <div class="callout alert">
+                    <h7>Unavailable</h7>
+                </div>
+              </td>
+              <td>
+                <a class="hollow button warning disabled" href="/book/2">BOOK NOW</a>
+              </td>
+            </tr>
+            <tr>
+              <td>203</td>
+              <td>
+                <div class="callout success">
+                    <h7>Available</h7>
+                </div>
+              </td>
+              <td>
+                <a class="hollow button warning" href="/book/2">BOOK NOW</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+{% endblock %}

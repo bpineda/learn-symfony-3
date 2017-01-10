@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="row">
+      <div class="medium-12 large-12 columns">
+        <h4>Clients</h4>
+        <div class="medium-1  columns">SEARCH:</div>
+        <div class="medium-2  columns"><input type="text" /></div>
+        <div class="medium-2  columns"><button type="button" class="button">SEND</button></div>
+        <div class="medium-2  columns"><button type="button" class="button">ADD NEW CLIENT</button></div>
+
+        <table class="stack">
+          <thead>
+            <tr>
+              <th width="200">Name</th>
+              <th width="200">Email</th>
+              <th width="200">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Steven Moser</td>
+              <td>moser@email.com</td>
+              <td>
+                <button class="hollow button" href="#">EDIT</button>
+                <button class="hollow button alert" href="#">DELETE</button>
+                <a class="hollow button warning" href="/book/1">BOOK A ROOM</a>
+              </td>
+            </tr>
+            <tr>
+              <td>Stephanie Evans</td>
+              <td>evans@email.com</td>
+              <td>
+                <button class="hollow button" href="#">EDIT</button>
+                <button class="hollow button alert" href="#">DELETE</button>
+                <a class="hollow button warning" href="/book/2">BOOK A ROOM</a>
+              </td>
+            </tr>
+            <tr>
+              <td>Bernard Pineda</td>
+              <td>pineda@email.com</td>
+              <td>
+                <button class="hollow button" href="#">EDIT</button>
+                <button class="hollow button alert" href="#">DELETE</button>
+                <a class="hollow button warning" href="/book/2">BOOK A ROOM</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+{% endblock %}
