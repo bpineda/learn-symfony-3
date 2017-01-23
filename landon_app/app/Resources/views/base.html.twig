@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="{{ asset('css/foundation.css') }}">
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         <link rel="stylesheet" href="{{ asset('pickadate/lib/themes/default.css') }}">
+        <link rel="stylesheet" href="{{ asset('pickadate/lib/themes/default.date.css') }}">
     </head>
     <body>
 
@@ -49,7 +50,12 @@
         <script src="{{ asset('pickadate/lib/picker.js') }}"></script>
         <script src="{{ asset('pickadate/lib/picker.date.js') }}"></script>
         <script>
-            $('.datepicker').pickadate();
+            $('.datepicker').pickadate(
+              { 
+                format: 'yyyy-mm-dd',
+                formatSubmit: 'yyyy-mm-dd' 
+              }
+              );
         </script>
     </body>
 </html>

@@ -19,33 +19,17 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Steven Moser</td>
-              <td>moser@email.com</td>
-              <td>
-                <button class="hollow button" href="#">EDIT</button>
-                <button class="hollow button alert" href="#">DELETE</button>
-                <a class="hollow button warning" href="/book/1">BOOK A ROOM</a>
-              </td>
-            </tr>
-            <tr>
-              <td>Stephanie Evans</td>
-              <td>evans@email.com</td>
-              <td>
-                <button class="hollow button" href="#">EDIT</button>
-                <button class="hollow button alert" href="#">DELETE</button>
-                <a class="hollow button warning" href="/book/2">BOOK A ROOM</a>
-              </td>
-            </tr>
-            <tr>
-              <td>Bernard Pineda</td>
-              <td>pineda@email.com</td>
-              <td>
-                <button class="hollow button" href="#">EDIT</button>
-                <button class="hollow button alert" href="#">DELETE</button>
-                <a class="hollow button warning" href="/book/2">BOOK A ROOM</a>
-              </td>
-            </tr>
+            {% for client in clients %}
+              <tr>
+                <td>{{ client.name }} {{ client.lastName }}</td>
+                <td>{{ client.email }}</td>
+                <td>
+                  <a class="hollow button" href="/clients/edit/{{ client.id }}">EDIT</a>
+                  <a class="hollow button alert" href="/clients/destroy/{{ client.id }}">DELETE</a>
+                  <a class="hollow button warning" href="{{ path('booking', {'id_client': client.id}) }}">BOOK A ROOM</a>
+                </td>
+              </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>
