@@ -13,11 +13,8 @@ class AdminController extends Controller
      */
     public function showIndex()
     {
-        
-        $data['current_page'] = 'admin';
 
-        return $this->render(   'admin/index.html.twig', 
-                                $data );
+        
                                 
     }
 }
