@@ -17,53 +17,22 @@ class ReservationsController extends Controller
      */
     public function showIndex()
     {
-        $data['current_page'] = 'reservations';
+        $data[] = [];
+        $reservation_repo = $this     
+                                ->getDoctrine()
+                                ->getRepository('AppBundle:Reservation');
+        
+        $reservations = $reservation_repo->getCurrentReservations();
+        $data['reservations'] = $reservations;
 
         return $this->render(   'reservations/index.html.twig', 
                                 $data );
     }
 
     /**
-     * @Route("/reservations/test")
+     * @Route("/reservation/{client_id}", name="booking")
      */
-    public function testInsert()
-    {
-        $reservation = new Reservation();
-        $date_in = new \DateTime('2017-01-18');
-        $date_out = new \DateTime('2017-01-20');
-        $reservation->setDateIn($date_in);
-        $reservation->setDateOut($date_out);
-
-        $client = $this->getDoctrine()
-        ->getRepository('AppBundle:Client')
-        ->find(1);
-
-        $room = $this->getDoctrine()
-        ->getRepository('AppBundle:Room')
-        ->find(2);
-
-        $reservation->setClient($client);
-        $reservation->setRoom($room);
-
-
-
-        $em = $this->getDoctrine()->getManager();
-
-        // tells Doctrine you want to (eventually) save the Product (no queries yet)
-        $em->persist($reservation);
-
-        // actually executes the queries (i.e. the INSERT query)
-        $em->flush();
-
-        return new Response('Saved new reservation with id '.$reservation->getId());
-    }
-
-    
-
-    /**
-     * @Route("/reservation/{id_client}", name="booking")
-     */
-    public function book(Request $request, $id_client)
+    public function book(Request $request, $client_id)
     {
 
         $data = [];
@@ -80,11 +49,7 @@ class ReservationsController extends Controller
 
         if ($form->isSubmitted()) {
             $form_data = $form->getData();
-            /*echo '<pre>';
-            print_r($form_data);
-            print_r($form_data['dateFrom']);
-            print_r($form_data['dateTo']);
-            echo '</pre>';*/
+
             $data['dates']['from'] = $form_data['dateFrom'];
             $data['dates']['to'] = $form_data['dateTo'];
 
@@ -94,14 +59,12 @@ class ReservationsController extends Controller
 
             $data['rooms'] = $rooms;
 
-        } else {
-            //echo 'no data submitted';
-        }
+        } 
         
         $client = $this
                         ->getDoctrine()
                         ->getRepository('AppBundle:Client')
-                        ->find($id_client);
+                        ->find($client_id);
 
         
 
@@ -123,27 +86,34 @@ class ReservationsController extends Controller
         $reservation->setDateIn($date_start);
         $reservation->setDateOut($date_end);
 
-        $client = $this->getDoctrine()
-        ->getRepository('AppBundle:Client')
-        ->find($client_id);
+        $client = $this
+                    ->getDoctrine()
+                    ->getRepository('AppBundle:Client')
+                    ->find($client_id);
 
-        $room = $this->getDoctrine()
-        ->getRepository('AppBundle:Room')
-        ->find($room_id);
+        $room = $this
+                    ->getDoctrine()
+                    ->getRepository('AppBundle:Room')
+                    ->find($room_id);
 
-        $em = $this->getDoctrine()->getManager();
+        $em = $this
+                ->getDoctrine()
+                ->getManager();
 
-        $room_availability = $em->getRepository('AppBundle:Room')
+        $room_availability = $em
+                                ->getRepository('AppBundle:Room')
                                 ->checkRoomAvailability($room_id,$date_in, $date_out);
 
         //Check if there are booked rooms with those dates
         if(!$room_availability)
         {
-            //echo 'Room is available';
+            //Room is available
             $reservation->setClient($client);
             $reservation->setRoom($room);
+
             $em->persist($reservation);
             $em->flush();
+            
             return $this->redirectToRoute('reservations');
 
         }else
@@ -151,13 +121,26 @@ class ReservationsController extends Controller
 
             throw new \Exception('Room is already booked!');
 
-        }
-        
+        }    
 
-        
+    }
 
-        //return new Response($client_id . ' ' . $room_id . ' '. $date_in . ' '. $date_out );
-        //return $this->render(   'admin/index.html.twig' , ['room_availability' => $room_availability] );
+    /**
+     * @Route("/reservation/cancel/{reservation_id}", name="cancel_booking")
+     */
+    public function cancel($reservation_id)
+    {
+        $em = $this
+                ->getDoctrine()
+                ->getManager();
+
+        $reservation = $em->getReference('AppBundle:Reservation', $reservation_id);
+        $em->remove($reservation);
+        $em->flush();
+
+        return $this->redirectToRoute('reservations');
+
+
     }
 
 }

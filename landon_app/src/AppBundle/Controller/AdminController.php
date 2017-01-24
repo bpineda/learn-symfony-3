@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class AdminController extends Controller
 {
     /**
-     * @Route("/")
+     * @Route("/", name="home")
      */
     public function showIndex()
     {

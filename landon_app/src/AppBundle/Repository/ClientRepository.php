@@ -10,4 +10,11 @@ namespace AppBundle\Repository;
  */
 class ClientRepository extends \Doctrine\ORM\EntityRepository
 {
+    public $titles = ['mr', 'ms', 'mrs', 'dr', 'mx'];
+
+    public function getTitles()
+    {
+        return $this->titles;
+    }
+
 }

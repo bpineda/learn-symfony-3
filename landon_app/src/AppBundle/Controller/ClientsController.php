@@ -12,77 +12,7 @@ class ClientsController extends Controller
 {
 
     /**
-     * @Route("/test_delete/{id}")
-     */
-    public function testDelete($id)
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $client = $em->getRepository('AppBundle:Client')->find($id);
-
-        if (!$client) {
-            throw $this->createNotFoundException(
-                'No client found for id '.$id
-            );
-        }
-
-        $em->remove($client);
-        $em->flush();
-
-        return $this->redirectToRoute('homepage');
-
-    }
-
-    /**
-     * @Route("/test_update/{id}")
-     */
-    public function testUpdate($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $client = $em->getRepository('AppBundle:Client')->find($id);
-
-        if (!$client) {
-            throw $this->createNotFoundException(
-                'No client found for id '.$id
-            );
-        }
-
-        $client->setName('Mia');
-        $client->setLastName('Wallace');
-        $client->setEmail('mia.wallace@email.com');
-        $em->flush();
-
-        return $this->redirectToRoute('homepage');
-    }
-
-    /**
-     * @Route("/test")
-     */
-    public function testInsert()
-    {
-        $client = new Client();
-        $client->setTitle('mr.');
-        $client->setName('Vincent');
-        $client->setLastName('Vega');
-        $client->setAddress('1227 Pine View');
-        $client->setZipCode('2700');
-        $client->setCity('Carp');
-        $client->setState('CA');
-        $client->setEmail('vincent.vega@email.com');
-
-        $em = $this->getDoctrine()->getManager();
-
-        // tells Doctrine you want to (eventually) save the Product (no queries yet)
-        $em->persist($client);
-
-        // actually executes the queries (i.e. the INSERT query)
-        $em->flush();
-
-        return new Response('Saved new client with id '.$client->getId());
-    }
-
-    /**
-     * @Route("/clients")
+     * @Route("/clients", name="index_clients")
      */
     public function showIndex()
     {
@@ -99,27 +29,143 @@ class ClientsController extends Controller
     }
 
     /**
-     * @Route("/clients/new")
+     * @Route("/clients/modify/{client_id}", name="modify_client")
      */
-    public function showNew()
+    public function showDetails(Request $request, $client_id)
     {
+
         $data = [];
+        
+        $data['client']['name'] = '';
+        $data['client']['last_name'] = '';
+        $data['mode'] = 'm'; //Modify
+
+        $form = $this   ->createFormBuilder()
+                        ->add('title')
+                        ->add('name')
+                        ->add('lastName')
+                        ->add('address')
+                        ->add('zipCode')
+                        ->add('city')
+                        ->add('state')
+                        ->add('email')
+                        ->getForm();
+        
+        $form->handleRequest($request);
+        $client_repo = $client = $this     
+                                    ->getDoctrine()
+                                    ->getRepository('AppBundle:Client');
+
+        if ($form->isSubmitted()) 
+        {
+
+            $form_data = $form->getData();
+
+            $em = $this->getDoctrine()->getManager();
+            
+            $client = $client_repo->find($client_id);
+            $client->setTitle($form_data['title']);
+            $client->setName($form_data['name']);
+            $client->setLastName($form_data['lastName']);
+            $client->setAddress($form_data['address']);
+            $client->setZipCode($form_data['zipCode']);
+            $client->setCity($form_data['city']);
+            $client->setState($form_data['state']);
+            $client->setEmail($form_data['email']);
+
+            //$em->persist($client); //We no longer need to persist
+            $em->flush();
+
+            return $this->redirectToRoute('index_clients');
+
+        } else 
+        {
+
+            $client_repo = $this     
+                                ->getDoctrine()
+                                ->getRepository('AppBundle:Client');
+
+            $client = $client_repo->find( $client_id );
+            
+            $data['form'] = [];
+            $client_data['id'] = $client->getId();
+            $client_data['titles'] = $client_repo->getTitles();
+            $client_data['title'] = $client->getTitle();
+            $client_data['name'] = $client->getName();
+            $client_data['last_name'] = $client->getLastName();
+            $client_data['address'] = $client->getAddress();
+            $client_data['zip_code'] = $client->getZipCode();
+            $client_data['city'] = $client->getCity();
+            $client_data['state'] = $client->getState();
+            $client_data['email'] = $client->getEmail();
+
+            $data['form'] = $client_data; 
+
+        }
 
         return $this->render(   'clients/form.html.twig',
                                 $data );
+
     }
 
     /**
-     * @Route("/clients/details/{id}")
+     * @Route("/clients/new", name="new_client")
      */
-    public function showDetails($id)
+    public function showNew(Request $request)
     {
+
         $data = [];
+        $data['mode'] = 'n'; //New
+        
+        $data['client']['name'] = '';
+        $data['client']['last_name'] = '';
+        $form = $this   ->createFormBuilder()
+                        ->add('title')
+                        ->add('name')
+                        ->add('lastName')
+                        ->add('address')
+                        ->add('zipCode')
+                        ->add('city')
+                        ->add('state')
+                        ->add('email')
+                        ->getForm();
+        
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) 
+        {
+
+            $form_data = $form->getData();
+
+            $em = $this->getDoctrine()->getManager();
+            
+            $client = new Client();
+            $client->setTitle($form_data['title']);
+            $client->setName($form_data['name']);
+            $client->setLastName($form_data['lastName']);
+            $client->setAddress($form_data['address']);
+            $client->setZipCode($form_data['zipCode']);
+            $client->setCity($form_data['city']);
+            $client->setState($form_data['state']);
+            $client->setEmail($form_data['email']);
+
+            $em->persist($client);
+            $em->flush();
+
+            return $this->redirectToRoute('index_clients', $data);
+
+        } 
+
+        //$data = [];
+        $client_repo = $client = $this     
+                                ->getDoctrine()
+                                ->getRepository('AppBundle:Client');
+
+        $data['form'] = [];
+        $data['form']['titles'] = $client_repo->getTitles();
 
         return $this->render(   'clients/form.html.twig',
                                 $data );
     }
-
-    
 
 }

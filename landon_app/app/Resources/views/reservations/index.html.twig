@@ -5,11 +5,6 @@
     <div class="row">
       <div class="medium-12 large-12 columns">
         <h4>Reservations</h4>
-        <div class="medium-1  columns">FROM:</div>
-        <div class="medium-2  columns"><input type="text" class="datepicker" /></div>
-        <div class="medium-1  columns">TO:</div>
-        <div class="medium-2  columns"><input type="text" class="datepicker" /></div>
-        <div class="medium-2  columns"><button type="button" class="button">SEARCH</button></div>
 
         <table class="stack">
           <thead>
@@ -21,33 +16,16 @@
             </tr>
           </thead>
           <tbody>
+          {% for reservation in reservations %}
             <tr>
-              <td>101</td>
-              <td>Steven Moser</td>
-              <td>JAN-01-2017 to JAN-05-2017</td>
+              <td>{{reservation.room.name}}</td>
+              <td>{{reservation.client.title | capitalize}}. {{reservation.client.name}} {{reservation.client.lastName}}</td>
+              <td>{{ reservation.dateIn | date('M-d-Y') | upper }} to {{ reservation.dateOut | date('M-d-Y') | upper }}</td>
               <td>
-                <button class="hollow button" href="#">VIEW</button>
-                <button class="hollow button alert" href="#">CANCEL</button>
+                <a class="hollow button alert" href="{{ path('cancel_booking', { 'reservation_id' : reservation.id }) }}" onclick="return confirm('Are you sure you wish to cancel the reservation?')">CANCEL</a>
               </td>
             </tr>
-            <tr>
-              <td>102</td>
-              <td>Stephanie Evans</td>
-              <td>JAN-01-2017 to JAN-05-2017</td>
-              <td>
-                <button class="hollow button" href="#">VIEW</button>
-                <button class="hollow button alert" href="#">CANCEL</button>
-              </td>
-            </tr>
-            <tr>
-            <td>103</td>
-              <td>Bernard Pineda</td>
-              <td>JAN-01-2017 to JAN-05-2017</td>
-              <td>
-                <button class="hollow button" href="#">VIEW</button>
-                <button class="hollow button alert" href="#">CANCEL</button>
-              </td>
-            </tr>
+          {% endfor %}
           </tbody>
         </table>
       </div>

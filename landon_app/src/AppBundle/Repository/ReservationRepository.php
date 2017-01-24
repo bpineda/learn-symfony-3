@@ -10,4 +10,34 @@ namespace AppBundle\Repository;
  */
 class ReservationRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getCurrentReservations()
+    {
+
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb = $em->createQueryBuilder();
+        $today = date('Y-m-d');
+
+        $query = $em->createQuery("SELECT r, ro, c 
+        FROM AppBundle:Reservation r 
+        JOIN r.room ro 
+        JOIN r.client c
+        WHERE r.dateIn >= '$today'
+        ");
+        
+        $rs_reservations = $query->getResult();
+
+
+        try {
+
+            return $rs_reservations;
+
+        } catch (\Doctrine\ORM\NoResultException $e) 
+        {
+
+            return null;
+
+        }
+    }
 }
