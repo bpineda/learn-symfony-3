@@ -3,14 +3,28 @@
 {% block body %}
 
     <div class="row">
-      <div class="medium-6 columns">
-        <h4>Landon Hotel App</h4>
-        <img class="thumbnail" src="{{ asset('images/attractions.jpg') }}" width="400">
-      </div>
-      <div class="medium-6 large-5 columns">
-        <p>Welcome to the Landon Hotel App</p>
-        <p>This program was developed to keep track of all of our customers.</p>
-        <p>This sofwtare also helps prevent overbooking.</p>
+      <div class="medium-12 large-12 columns">
+        <h4>Clients</h4>
+        <div class="medium-2  columns"><a type="button" class="button" href="{{ path('new_client')}}">ADD NEW CLIENT</a></div>
+
+        <table class="stack">
+          <thead>
+            <tr>
+              <th width="200">Name</th>
+              <th width="200">Email</th>
+              <th width="200">Action</th>
+            </tr>
+          </thead>
+              <tr>
+                <td>Mr. Roy Adams</td>
+                <td>radams1v@xinhuanet.com</td>
+                <td>
+                  <a class="hollow button" href="#">EDIT</a>
+                  <a class="hollow button warning" href="#">BOOK A ROOM</a>
+                </td>
+              </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
