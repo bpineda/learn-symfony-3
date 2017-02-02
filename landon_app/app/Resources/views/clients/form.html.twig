@@ -5,12 +5,12 @@
     <div class="row">
       <div class="medium-12 large-12 columns">
         <h4>{{mode == 'n' ? 'New Client' : 'Modify Client'}}</h4>
-        <form action="{{ mode == 'n' ? path('new_client') : path('modify_client', { 'id_client': form.id }) }}" method="post">
+        <form action="{{ mode == 'n' ? path('new_client') : path('modify_client', { 'client_id': form.id }) }}" method="post">
           <div class="medium-4  columns">
             <label>Title</label>
             <select name="form[title]">
             {% for title in form.titles %}
-              <option value="{{title}}">{{title | capitalize}}.</option>
+              <option value="{{title}}" {{ title == form.title ? 'selected' : '' }}>{{title | capitalize}}.</option>
             {% endfor %}
             </select>
           </div>
