@@ -81,9 +81,7 @@ class ClientsController extends Controller
         } else 
         {
 
-            $client_repo = $this     
-                                ->getDoctrine()
-                                ->getRepository('AppBundle:Client');
+            
 
             $client = $client_repo->find( $client_id );
             
@@ -100,6 +98,7 @@ class ClientsController extends Controller
             $client_data['email'] = $client->getEmail();
 
             $data['form'] = $client_data; 
+            $data['client_id'] = $client_id;
 
         }
 
@@ -163,6 +162,7 @@ class ClientsController extends Controller
 
         $data['form'] = [];
         $data['form']['titles'] = $client_repo->getTitles();
+        $data['form']['title'] = '';
 
         return $this->render(   'clients/form.html.twig',
                                 $data );
