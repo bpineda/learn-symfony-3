@@ -40,7 +40,6 @@ class ReservationsController extends Controller
         $data['dates']['from'] = '';
         $data['dates']['to'] = '';
         $form = $this   ->createFormBuilder()
-                        //->add('userEmail', 'email')
                         ->add('dateFrom')
                         ->add('dateTo')
                         ->getForm();
